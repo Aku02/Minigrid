@@ -17,6 +17,19 @@ Note that the library was previously known as gym-minigrid and it has been refer
 
 See the [Project Roadmap](https://github.com/Farama-Foundation/Minigrid/issues/363) for details regarding the long-term plans.
 
+## Changelog
+
+### Oracle-Based Demonstrations for Mazes
+To generate oracle-based demonstrations for mazes (used to train sequence model-based methods), refer to the following script:
+
+- **File:** `tests/get_demos.py`
+
+This script provides a straightforward way to create demonstrations for maze-solving task### Adding New Environments for Adaptive Tasks
+If you are interested in adding more environments for adaptive tasks, see the example provided in the commit below:
+
+- **Commit Reference:** [4fa05df47fa58203c508d1925a7eeab62746c6cc](https://github.com/Aku02/Minigrid/commit/4fa05df47fa58203c508d1925a7eeab62746c6cc)
+
+
 # Installation
 
 To install the Minigrid library use `pip install minigrid`.
