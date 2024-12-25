@@ -7,7 +7,7 @@ from __future__ import annotations
 from minigrid.core.constants import COLOR_NAMES
 from minigrid.core.world_object import Ball, Box, Key
 from minigrid.envs.babyai.core.roomgrid_level import RoomGridLevel
-from minigrid.envs.babyai.core.verifier import ObjDesc, OpenInstr, PickupInstr
+from minigrid.envs.babyai.core.verifier import ObjDesc, OpenInstr, PickupInstr, GoToInstr
 
 
 class Unlock(RoomGridLevel):
@@ -368,12 +368,12 @@ class BlockedUnlockPickup(RoomGridLevel):
     """
 
     def __init__(self, max_steps: int | None = None, **kwargs):
-        room_size = 6
+        room_size = 5
         if max_steps is None:
             max_steps = 16 * room_size**2
 
         super().__init__(
-            num_rows=1, num_cols=2, room_size=room_size, max_steps=max_steps, **kwargs
+            num_rows=2, num_cols=2, room_size=room_size, max_steps=max_steps, **kwargs
         )
 
     def gen_mission(self):
@@ -389,7 +389,7 @@ class BlockedUnlockPickup(RoomGridLevel):
 
         self.place_agent(0, 0)
 
-        self.instrs = PickupInstr(ObjDesc(obj.type))
+        self.instrs = GoToInstr(ObjDesc(obj.type))
 
 
 class UnlockToUnlock(RoomGridLevel):

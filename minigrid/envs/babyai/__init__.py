@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from minigrid.envs.babyai.goto import (
     GoTo,
+    GoToG2,
     GoToDoor,
     GoToImpUnlock,
     GoToLocal,
@@ -12,6 +13,7 @@ from minigrid.envs.babyai.goto import (
     GoToRedBallNoDists,
     GoToRedBlueBall,
     GoToSeq,
+    GoToSeqUn,
 )
 from minigrid.envs.babyai.open import (
     Open,

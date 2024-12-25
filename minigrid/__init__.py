@@ -615,10 +615,16 @@ def register_minigrid_envs():
         entry_point="minigrid.envs.babyai:GoToLocal",
     )
 
+    # register(
+    #     id="BabyAI-GoToLocalS5N2-v0",
+    #     entry_point="minigrid.envs.babyai:GoToLocal",
+    #     kwargs={"room_size": 5, "num_dists": 2},
+    # )
+
     register(
         id="BabyAI-GoToLocalS5N2-v0",
         entry_point="minigrid.envs.babyai:GoToLocal",
-        kwargs={"room_size": 5, "num_dists": 2},
+        kwargs={"room_size": 25, "num_dists": 2},
     )
 
     register(
@@ -684,8 +690,15 @@ def register_minigrid_envs():
     register(
         id="BabyAI-GoToLocalS8N7-v0",
         entry_point="minigrid.envs.babyai:GoToLocal",
-        kwargs={"room_size": 8, "num_dists": 7},
+        kwargs={"room_size": 8, "num_dists": 7, "max_steps": 149},
     )
+
+    register(
+        id="BabyAI-GoToLocalS10N1-v0",
+        entry_point="minigrid.envs.babyai:GoToLocal",
+        kwargs={"room_size": 10, "num_dists": 1, "max_steps": 200},
+    )
+
 
     register(
         id="BabyAI-GoTo-v0",
@@ -713,13 +726,63 @@ def register_minigrid_envs():
     register(
         id="BabyAI-GoToObjMazeS4R2-v0",
         entry_point="minigrid.envs.babyai:GoTo",
-        kwargs={"num_dists": 1, "room_size": 4, "num_rows": 2, "num_cols": 2},
+        kwargs={"num_dists": 1, "room_size": 4, "num_rows": 2, "num_cols": 2, "doors_open": False, "max_steps": 499},
+    )
+
+    register(
+        id="BabyAI-GoToObjMazeS4N4AP-v0",
+        entry_point="minigrid.envs.babyai:GoTo",
+        kwargs={"num_dists": 4, "room_size": 4, "doors_open": True, "max_steps": 499},
+    )
+
+    register(
+        id="BabyAI-GoToObjMazeS4G2N4AP-v0",
+        entry_point="minigrid.envs.babyai:GoTo2",
+        kwargs={"num_dists": 4, "room_size": 4, "doors_open": True, "max_steps": 499},
+    )
+
+    register(
+        id="BabyAI-GoToObjMazeS4N10AP-v0",
+        # entry_point="minigrid.envs.babyai:GoTo",
+        # entry_point="minigrid.envs.babyai:GoToG2",
+        entry_point="minigrid.envs.babyai:GoToLocal",
+        kwargs={"num_dists": 10, "room_size": 10, "max_steps": 499},
+        # kwargs={"num_dists": 4, "room_size": 4, "doors_open": True, "max_steps": 499},
+        # kwargs={"num_dists": 4, "room_size": 4, "doors_open": False, "max_steps": 699},
+    )
+
+    register(
+        id="BabyAI-GoToObjMazeS4CloseAP-v0",
+        entry_point="minigrid.envs.babyai:GoTo",
+        # entry_point="minigrid.envs.babyai:GoToG2",
+        # entry_point="minigrid.envs.babyai:GoToLocal",
+        # kwargs={"num_dists": 10, "room_size": 10, "max_steps": 499},
+        # kwargs={"num_dists": 4, "room_size": 4, "doors_open": True, "max_steps": 499},
+        kwargs={"num_dists": 4, "room_size": 4, "doors_open": False, "max_steps": 699},
     )
 
     register(
         id="BabyAI-GoToObjMazeS4-v0",
         entry_point="minigrid.envs.babyai:GoTo",
-        kwargs={"num_dists": 1, "room_size": 4},
+        kwargs={"num_dists": 4, "room_size": 4, "doors_open": True, "max_steps": 399},
+    )
+
+    register(
+        id="BabyAI-GoToObjMazeS4G2-v0",
+        entry_point="minigrid.envs.babyai:GoToG2",
+        kwargs={"num_dists": 4, "room_size": 4, "doors_open": True, "max_steps": 499},
+    )
+
+    register(
+        id="BabyAI-GoToObjMazeS4Close-v0",
+        entry_point="minigrid.envs.babyai:GoTo",
+        kwargs={"num_dists": 4, "room_size": 4, "doors_open": False, "max_steps": 499},
+    )
+
+    register(
+        id="BabyAI-GoToObjMazeS7G2-v0",
+        entry_point="minigrid.envs.babyai:GoToG2",
+        kwargs={"num_dists": 4, "room_size": 7, "doors_open": True, "max_steps": 999},
     )
 
     register(
@@ -737,7 +800,7 @@ def register_minigrid_envs():
     register(
         id="BabyAI-GoToObjMazeS7-v0",
         entry_point="minigrid.envs.babyai:GoTo",
-        kwargs={"num_dists": 1, "room_size": 7},
+        kwargs={"num_dists": 7, "room_size": 7, "doors_open": True, "max_steps": 999},
     )
 
     register(
@@ -753,7 +816,14 @@ def register_minigrid_envs():
     register(
         id="BabyAI-GoToSeqS5R2-v0",
         entry_point="minigrid.envs.babyai:GoToSeq",
-        kwargs={"room_size": 5, "num_rows": 2, "num_cols": 2, "num_dists": 4},
+        kwargs={"room_size": 5, "num_rows": 2, "num_cols": 2, "num_dists": 4, "max_steps": 399},
+    )
+
+    register(
+        id="BabyAI-GoToSeqS5R2Un-v0",
+        entry_point="minigrid.envs.babyai:GoToSeqUn",
+        # kwargs={"room_size": 5, "num_rows": 2, "num_cols": 2, "num_dists": 8, "max_steps": 499},
+        kwargs={"room_size": 5, "num_rows": 2, "num_cols": 2, "num_dists": 5, "max_steps": 499},
     )
 
     register(
@@ -863,11 +933,14 @@ def register_minigrid_envs():
     register(
         id="BabyAI-UnblockPickup-v0",
         entry_point="minigrid.envs.babyai:UnblockPickup",
+        kwargs={"max_steps": 499},
     )
 
     register(
         id="BabyAI-PickupLoc-v0",
         entry_point="minigrid.envs.babyai:PickupLoc",
+        kwargs={"max_steps": 299},
+
     )
 
     register(
@@ -892,12 +965,13 @@ def register_minigrid_envs():
     register(
         id="BabyAI-PutNextLocal-v0",
         entry_point="minigrid.envs.babyai:PutNextLocal",
+        kwargs={"max_steps": 499},
     )
 
     register(
         id="BabyAI-PutNextLocalS5N3-v0",
         entry_point="minigrid.envs.babyai:PutNextLocal",
-        kwargs={"room_size": 5, "num_objs": 3},
+        kwargs={"room_size": 5, "num_objs": 3, "max_steps": 499},
     )
 
     register(
@@ -992,6 +1066,8 @@ def register_minigrid_envs():
     register(
         id="BabyAI-BlockedUnlockPickup-v0",
         entry_point="minigrid.envs.babyai:BlockedUnlockPickup",
+        kwargs={"max_steps": 899},
+
     )
 
     register(
@@ -1044,7 +1120,7 @@ def register_minigrid_envs():
     register(
         id="BabyAI-KeyCorridorS3R3-v0",
         entry_point="minigrid.envs.babyai:KeyCorridor",
-        kwargs={"room_size": 3, "num_rows": 3},
+        kwargs={"room_size": 3, "num_rows": 3, "max_steps": 499},
     )
 
     register(
@@ -1091,7 +1167,7 @@ def register_minigrid_envs():
     register(
         id="BabyAI-MoveTwoAcrossS5N2-v0",
         entry_point="minigrid.envs.babyai:MoveTwoAcross",
-        kwargs={"room_size": 5, "objs_per_room": 2},
+        kwargs={"room_size": 5, "objs_per_room": 3},
     )
 
     register(

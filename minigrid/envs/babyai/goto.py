@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from minigrid.envs.babyai.core.levelgen import LevelGen
 from minigrid.envs.babyai.core.roomgrid_level import RejectSampling, RoomGridLevel
-from minigrid.envs.babyai.core.verifier import GoToInstr, ObjDesc
+from minigrid.envs.babyai.core.verifier import GoToInstr, ObjDesc, AndInstr
 
 
 class GoToRedBallGrey(RoomGridLevel):
@@ -334,7 +334,9 @@ class GoToLocal(RoomGridLevel):
         objs = self.add_distractors(num_distractors=self.num_dists, all_unique=False)
         self.check_objs_reachable()
         obj = self._rand_elem(objs)
-        self.instrs = GoToInstr(ObjDesc(obj.type, obj.color))
+        # self.instrs = GoToInstr(ObjDesc(obj.type, obj.color))
+        self.instrs = AndInstr(GoToInstr(ObjDesc(objs[0].type, objs[0].color)), GoToInstr(ObjDesc(objs[-1].type, objs[-1].color)))
+
 
 
 class GoTo(RoomGridLevel):
@@ -423,6 +425,94 @@ class GoTo(RoomGridLevel):
         # If requested, open all the doors
         if self.doors_open:
             self.open_all_doors()
+
+class GoToG2(RoomGridLevel):
+    """
+
+    ## Description
+
+    Go to an object, the object may be in another room. Many distractors.
+
+    ## Mission Space
+
+    "go to a/the {color} {type}"
+
+    {color} is the color of the box. Can be "red", "green", "blue", "purple",
+    "yellow" or "grey".
+
+    {type} is the type of the object. Can be "ball", "box" or "key".
+
+    ## Action Space
+
+    | Num | Name         | Action            |
+    |-----|--------------|-------------------|
+    | 0   | left         | Turn left         |
+    | 1   | right        | Turn right        |
+    | 2   | forward      | Move forward      |
+    | 3   | pickup       | Pick up an object |
+    | 4   | drop         | Unused            |
+    | 5   | toggle       | Unused            |
+    | 6   | done         | Unused            |
+
+    ## Observation Encoding
+
+    - Each tile is encoded as a 3 dimensional tuple:
+        `(OBJECT_IDX, COLOR_IDX, STATE)`
+    - `OBJECT_TO_IDX` and `COLOR_TO_IDX` mapping can be found in
+        [minigrid/core/constants.py](minigrid/core/constants.py)
+    - `STATE` refers to the door state with 0=open, 1=closed and 2=locked
+
+    ## Rewards
+
+    A reward of '1 - 0.9 * (step_count / max_steps)' is given for success, and '0' for failure.
+
+    ## Termination
+
+    The episode ends if any one of the following conditions is met:
+
+    1. The agent goes to the object.
+    2. Timeout (see `max_steps`).
+
+    ## Registered Configurations
+
+    - `BabyAI-GoTo-v0`
+    - `BabyAI-GoToOpen-v0`
+    - `BabyAI-GoToObjMaze-v0`
+    - `BabyAI-GoToObjMazeOpen-v0`
+    - `BabyAI-GoToObjMazeS4R2-v0`
+    - `BabyAI-GoToObjMazeS4-v0`
+    - `BabyAI-GoToObjMazeS5-v0`
+    - `BabyAI-GoToObjMazeS6-v0`
+    - `BabyAI-GoToObjMazeS7-v0`
+    """
+
+    def __init__(
+        self,
+        room_size=8,
+        num_rows=3,
+        num_cols=3,
+        num_dists=18,
+        doors_open=False,
+        **kwargs,
+    ):
+        self.num_dists = num_dists
+        self.doors_open = doors_open
+        super().__init__(
+            num_rows=num_rows, num_cols=num_cols, room_size=room_size, **kwargs
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        self.connect_all()
+        objs = self.add_distractors(num_distractors=self.num_dists, all_unique=False)
+        self.check_objs_reachable()
+        obj = self._rand_elem(objs)
+        # self.instrs = GoToInstr(ObjDesc(obj.type, obj.color))
+        self.instrs = AndInstr(GoToInstr(ObjDesc(objs[0].type, objs[0].color)), GoToInstr(ObjDesc(objs[-1].type, objs[-1].color)))
+        # If requested, open all the doors
+        if self.doors_open:
+            self.open_all_doors()
+
 
 
 class GoToImpUnlock(RoomGridLevel):
@@ -596,6 +686,82 @@ class GoToSeq(LevelGen):
             locked_room_prob=0,
             locations=False,
             unblocking=False,
+            **kwargs,
+        )
+
+class GoToSeqUn(LevelGen):
+    """
+
+    ## Description
+
+    Sequencing of go-to-object commands.
+
+    Competencies: Maze, GoTo, Seq
+    No locked room.
+    No locations.
+    No unblocking.
+
+    ## Mission Space
+
+    "go to a/the {color} {type}" +
+    "and go to a/the {color} {type}" +
+    ", then go to a/the {color} {type}" +
+    "and go to a/the {color} {type}"
+
+    {color} is the color of the box. Can be "red", "green", "blue", "purple",
+    "yellow" or "grey".
+
+    {type} is the type of the object. Can be "ball", "box" or "key".
+
+    ## Action Space
+
+    | Num | Name         | Action            |
+    |-----|--------------|-------------------|
+    | 0   | left         | Turn left         |
+    | 1   | right        | Turn right        |
+    | 2   | forward      | Move forward      |
+    | 3   | pickup       | Pick up an object |
+    | 4   | drop         | Unused            |
+    | 5   | toggle       | Unused            |
+    | 6   | done         | Unused            |
+
+    ## Observation Encoding
+
+    - Each tile is encoded as a 3 dimensional tuple:
+        `(OBJECT_IDX, COLOR_IDX, STATE)`
+    - `OBJECT_TO_IDX` and `COLOR_TO_IDX` mapping can be found in
+        [minigrid/core/constants.py](minigrid/core/constants.py)
+    - `STATE` refers to the door state with 0=open, 1=closed and 2=locked
+
+    ## Rewards
+
+    A reward of '1 - 0.9 * (step_count / max_steps)' is given for success, and '0' for failure.
+
+    ## Termination
+
+    The episode ends if any one of the following conditions is met:
+
+    1. The agent goes to the object.
+    2. Timeout (see `max_steps`).
+
+    ## Registered Configurations
+
+    - `BabyAI-GoToSeq-v0`
+    - `BabyAI-GoToSeqS5R2-v0`
+
+    """
+
+    def __init__(self, room_size=8, num_rows=3, num_cols=3, num_dists=18, **kwargs):
+        super().__init__(
+            room_size=room_size,
+            num_rows=num_rows,
+            num_cols=num_cols,
+            num_dists=num_dists,
+            action_kinds=["goto"],
+            instr_kinds=["and"],
+            locked_room_prob=0,
+            locations=False,
+            unblocking=True,
             **kwargs,
         )
 

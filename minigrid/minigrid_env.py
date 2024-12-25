@@ -19,7 +19,7 @@ from minigrid.core.mission import MissionSpace
 from minigrid.core.world_object import Point, WorldObj
 
 T = TypeVar("T")
-
+AGENT_TO_IDX_COLOR = {'agent':(10, 6)}
 
 class MiniGridEnv(gym.Env):
     """
@@ -594,6 +594,19 @@ class MiniGridEnv(gym.Env):
 
         return obs, reward, terminated, truncated, {}
 
+    def gen_full_obs(self):
+        grid = self.grid.slice(0, 0, self.grid.width, self.grid.height)
+        vis_mask = np.ones(shape=(grid.width, grid.height), dtype=np.bool_)
+        image = grid.encode(vis_mask)
+        x, y = self.agent_pos
+        dir = self.agent_dir 
+        agent_id, agent_color = AGENT_TO_IDX_COLOR['agent']
+        image[x,y,0] = agent_id
+        image[x,y,1] = agent_color
+        image[x,y,2] = dir
+        return image
+
+    
     def gen_obs_grid(self, agent_view_size=None):
         """
         Generate the sub-grid observed by the agent.

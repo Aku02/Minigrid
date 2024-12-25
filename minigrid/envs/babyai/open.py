@@ -389,7 +389,7 @@ class OpenDoorsOrder(RoomGridLevel):
         self.num_doors = num_doors
         self.debug = debug
 
-        room_size = 6
+        room_size = 5
         if max_steps is None:
             max_steps = 20 * room_size**2
 

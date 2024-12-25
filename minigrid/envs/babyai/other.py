@@ -268,7 +268,9 @@ class KeyCorridor(RoomGridLevel):
         # Make sure all rooms are accessible
         self.connect_all()
 
-        self.instrs = PickupInstr(ObjDesc(obj.type))
+        # self.instrs = PickupInstr(ObjDesc(obj.type))
+        self.instrs = GoToInstr(ObjDesc(obj.type))
+
 
 
 class OneRoomS8(RoomGridLevel):
@@ -397,7 +399,7 @@ class MoveTwoAcross(RoomGridLevel):
             max_steps = 16 * room_size**2
 
         super().__init__(
-            num_rows=1, num_cols=2, room_size=room_size, max_steps=max_steps, **kwargs
+            num_rows=2, num_cols=2, room_size=room_size, max_steps=max_steps, **kwargs
         )
 
     def gen_mission(self):

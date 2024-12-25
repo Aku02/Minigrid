@@ -64,7 +64,7 @@ class PutNextLocal(RoomGridLevel):
 
     """
 
-    def __init__(self, room_size=8, num_objs=8, **kwargs):
+    def __init__(self, room_size=10, num_objs=8, **kwargs):
         self.num_objs = num_objs
         super().__init__(num_rows=1, num_cols=1, room_size=room_size, **kwargs)
 

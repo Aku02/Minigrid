@@ -590,6 +590,7 @@ class BabyAIBot:
         self.stack = []
 
         # Process/parse the instructions
+        # breakpoint()
         self._process_instr(mission.unwrapped.instrs)
 
         # How many BFS searches this bot has performed
@@ -598,6 +599,25 @@ class BabyAIBot:
         # How many steps were made in total in all BFS searches
         # performed by this bot
         self.bfs_step_counter = 0
+    
+    def get_goal_state(self, obs=None, update_internal_state=True, *args, **kwargs):
+        goal_state = self.stack[-1].datum # self.get_goal_state()
+        # breakpoint()
+        return goal_state.obj_poss
+    
+    def get_all_goal_state(self, obs=None, update_internal_state=True, *args, **kwargs):
+        # breakpoint()
+        all_goal = []
+        for subgoal in self.stack:
+            if len(subgoal.datum.obj_poss) > 1:
+                all_goal += [subgoal.datum.obj_poss[-1]]
+            else:    
+                all_goal += list(subgoal.datum.obj_poss)
+            # all_goal += list(subgoal.datum.obj_poss)
+        # goal_state = self.stack.datum # self.get_goal_state()
+        flattened_list = [item for pair in all_goal for item in pair]
+        # breakpoint()
+        return flattened_list #goal_state.obj_poss
 
     def replan(self, action_taken=None):
         """Replan and suggest an action.
@@ -760,26 +780,6 @@ class BabyAIBot:
             if cell and (cell.type.endswith("door") or cell.type == "wall"):
                 return distance
             distance += 1
-        
-    def get_goal_state(self, obs=None, update_internal_state=True, *args, **kwargs):
-        goal_state = self.stack[-1].datum # self.get_goal_state()
-        # breakpoint()
-        return goal_state.obj_poss
-    
-    def get_all_goal_state(self, obs=None, update_internal_state=True, *args, **kwargs):
-        # breakpoint()
-        all_goal = []
-        for subgoal in self.stack:
-            if subgoal.datum is not None:
-                if len(subgoal.datum.obj_poss) > 1:
-                    all_goal += [subgoal.datum.obj_poss[-1]]
-                else:    
-                    all_goal += list(subgoal.datum.obj_poss)
-            # all_goal += list(subgoal.datum.obj_poss)
-        # goal_state = self.stack.datum # self.get_goal_state()
-        flattened_list = [item for pair in all_goal for item in pair]
-        # breakpoint()
-        return flattened_list #goal_state.obj_poss
 
     def _breadth_first_search(self, initial_states, accept_fn, ignore_blockers):
         """Performs breadth first search.
